@@ -1,0 +1,30 @@
+# This workflow will build a Java project with Ant
+
+name: Java CI
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+
+    runs-on: self-hosted
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up JDK 11
+      uses: actions/setup-java@v4
+      with:
+        java-version: '11'
+        distribution: 'temurin'
+
+    - name: Add Ant to PATH
+      run: |
+        export PATH=$PATH:/opt/ant/apache-ant-1.9.16/bin:/usr/java/jdk1.8.0_202-amd64/bin:/home/linuxuser/.local/bin:/home/linuxuser/bin:/usr/share/Modules/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin
+        echo $PATH  # Verify the PATH includes Ant
+        ant -version  # Check if Ant is now found
+
+    - name: Build with Ant
+      run: ant -noinput -buildfile build.xml
